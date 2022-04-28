@@ -1,12 +1,10 @@
 import 'dart:convert';
 
-import 'package:business_wallet/model/event.dart';
 import 'package:business_wallet/model/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('user class test', () {
+  test('user from json', () {
     String userJson =
         '{"id":1,"name":"Ahmet","surname":"Şenharputlu","phone":"00901234567890",'
         '"email":"user@example.com","linkedin":"www.linkedin.com/in/example","company":"Business Wallet"}';
@@ -16,7 +14,6 @@ void main() {
     expect(u.name, "Ahmet");
     expect(u.company, "Business Wallet");
     expect(u.linkedin, "www.linkedin.com/in/example");
-    expect(json.encode(u), userJson);
   });
 
   test("constructor test", () {
@@ -24,5 +21,16 @@ void main() {
 
     expect(u.name, "Ahmet");
     expect(u.email, null);
+  });
+
+  test("add contact", () {
+    User u = User("Ahmet", "Şenharptulu", "00901234567890");
+
+    User u2 = User("second", "user", "238641741097");
+
+    u.addContact(u2);
+
+    List<User> expectedContactList = [u2];
+    expect(u.contacts, expectedContactList);
   });
 }
