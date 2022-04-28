@@ -44,4 +44,16 @@ class User {
       contacts?.add(u);
     }
   }
+
+  List<User>? getContacts() {
+    return contacts;
+  }
+
+  void deleteContact(int id) {
+    contacts?.removeWhere((user) => user.id == id);
+  }
+
+  List<Event>? getPastEvents() {
+    return pastEvents;
+  }
 }
