@@ -1,9 +1,11 @@
 class Event {
-  int id;
+  late int id;
   String name;
   String? description;
   List<int>? organizers;
   List<int>? attendees;
+
+  Event(this.name, {description, organizers, attendees});
 
   Event.fromJson(Map<String, dynamic> json)
       : id = json["id"],

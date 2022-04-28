@@ -1,11 +1,13 @@
 class User {
-  int id;
+  late int id;
   String name;
   String surname;
-  String? phone;
+  String phone;
   String? email;
   String? linkedin;
   String? company;
+
+  User(this.name, this.surname, this.phone, {email, linkedin, company});
 
   User.fromJson(Map<String, dynamic> json)
       : id = json["id"],
