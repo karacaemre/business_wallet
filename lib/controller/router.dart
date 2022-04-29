@@ -10,7 +10,8 @@ class PageRouter {
       case event:
         return MaterialPageRoute(builder: (_) => const Event());
       case qr:
-        return MaterialPageRoute(builder: (_) => const QR());
+        final qrData = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) => QR(qrData:qrData));
       case profile:
         return MaterialPageRoute(builder: (_) => const Profile());
       case contacts:
