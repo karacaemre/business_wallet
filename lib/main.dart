@@ -19,7 +19,6 @@ class BusinessWallet extends StatefulWidget {
 }
 
 class _BusinessWalletState extends State<BusinessWallet> {
-
   bool loggedIn() {
     //TODO Implement me!
     return true;
@@ -46,7 +45,7 @@ class _BaseState extends State<Base> {
   int selectedTab = 0;
 
   // TODO
-  User currentUser = User("Ahmet", "Şenharputlu","10981240124");
+  late User currentUser;
 
   setIndex(int i) {
     setState(() {
@@ -58,8 +57,10 @@ class _BaseState extends State<Base> {
     var screens = [
       const Event(),
       const Contacts(),
-      const Center(child: Text("find"),),
-      const Profile(),
+      const Center(
+        child: Text("find"),
+      ),
+      Profile(currentUser: currentUser,),
     ];
 
     return screens[selectedTab];
@@ -68,6 +69,7 @@ class _BaseState extends State<Base> {
   @override
   void initState() {
     super.initState();
+    currentUser = User("Ahmet", "Şenharputlu", "1099981240124");
   }
 
   @override
@@ -77,7 +79,10 @@ class _BaseState extends State<Base> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.qr_code),
-        onPressed: (){Navigator.pushNamed(context, "/qr", arguments: currentUser.toJson().toString() );},
+        onPressed: () {
+          Navigator.pushNamed(context, "/qr",
+              arguments: currentUser.toJson().toString());
+        },
       ),
       body: getSelectedTab(),
       bottomNavigationBar: BottomAppBar(

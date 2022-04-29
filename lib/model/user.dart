@@ -1,7 +1,7 @@
 import 'event.dart';
 
 class User {
-  late int id;
+  int? id;
   String name;
   String surname;
   String phone;
