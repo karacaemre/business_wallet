@@ -53,7 +53,7 @@ class _QRState extends State<QR> {
           unselectedLabelColor: Colors.black,
           tabs: const [
             Tab(child: Text("Show")),
-            Tab(child: Text("Read")),
+            Tab(child: Text("Scan")),
           ],
         ),
       ),
@@ -62,7 +62,8 @@ class _QRState extends State<QR> {
 }
 
 class CreateQr extends StatefulWidget {
-  const CreateQr({Key? key, required qrData}) : super(key: key);
+  final String qrData;
+  CreateQr({Key? key, required this.qrData}) : super(key: key);
 
   @override
   State<CreateQr> createState() => _CreateQrState();
@@ -72,7 +73,7 @@ class _CreateQrState extends State<CreateQr> {
   @override
   Widget build(BuildContext context) {
     final qrKey = GlobalKey();
-    String qrData = 'Our Qr Data';
+    String qrData = widget.qrData;
 //RepaintBoundary is necessary for saving QR to user's phone
     return Container(
       padding: const EdgeInsets.all(50),
@@ -91,6 +92,8 @@ class _CreateQrState extends State<CreateQr> {
 }
 
 class ScanQrPage extends StatefulWidget {
+  const ScanQrPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _ScanQrPageState();
 }
