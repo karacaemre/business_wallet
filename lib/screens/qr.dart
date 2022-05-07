@@ -3,17 +3,11 @@ import 'dart:io';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class QR extends StatefulWidget {
+class QR extends StatelessWidget {
   final String qrData;
 
-  QR({Key? key, required this.qrData}) : super(key: key);
+  const QR({Key? key, required this.qrData}) : super(key: key);
 
-  @override
-  State<QR> createState() => _QRState();
-}
-
-class _QRState extends State<QR> {
-  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -36,8 +30,8 @@ class _QRState extends State<QR> {
             Expanded(
               child: TabBarView(
                 children: [
-                  CreateQr(qrData: widget.qrData),
-                  ScanQrPage(),
+                  CreateQr(qrData: qrData),
+                  const ScanQrPage(),
                 ],
               ),
             ),
@@ -63,7 +57,8 @@ class _QRState extends State<QR> {
 
 class CreateQr extends StatefulWidget {
   final String qrData;
-  CreateQr({Key? key, required this.qrData}) : super(key: key);
+
+  const CreateQr({Key? key, required this.qrData}) : super(key: key);
 
   @override
   State<CreateQr> createState() => _CreateQrState();
@@ -84,7 +79,7 @@ class _CreateQrState extends State<CreateQr> {
         //  embeddedImage: , You can add your custom image to the center of your QR
         //  semanticsLabel:'', You can add some info to display when your QR scanned
         size: 250,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         version: QrVersions.auto, //You can also give other versions
       ),
     );
@@ -125,7 +120,6 @@ class _ScanQrPageState extends State<ScanQrPage> {
   void readQr() async {
     if (result != null) {
       controller!.pauseCamera();
-      print(result!.code);
       controller!.dispose();
     }
   }
@@ -133,17 +127,15 @@ class _ScanQrPageState extends State<ScanQrPage> {
   @override
   Widget build(BuildContext context) {
     readQr();
-    return Scaffold(
-      body: QRView(
-        key: qrKey,
-        onQRViewCreated: _onQRViewCreated,
-        overlay: QrScannerOverlayShape(
-          borderColor: Colors.orange,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: 250,
-        ),
+    return QRView(
+      key: qrKey,
+      onQRViewCreated: _onQRViewCreated,
+      overlay: QrScannerOverlayShape(
+        borderColor: Colors.orange,
+        borderRadius: 10,
+        borderLength: 30,
+        borderWidth: 10,
+        cutOutSize: 250,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:business_wallet/screens/contacts.dart';
 import 'package:business_wallet/screens/profile.dart';
+import 'package:business_wallet/screens/auth.dart';
 import 'package:flutter/material.dart';
 import '../model/user.dart';
 import '../screens/event.dart';
@@ -14,10 +15,12 @@ class PageRouter {
         final qrData = settings.arguments as String;
         return MaterialPageRoute(builder: (_) => QR(qrData: qrData));
       case profile:
-        final user = settings.arguments as User;
+        User user = settings.arguments as User;
         return MaterialPageRoute(builder: (_) => Profile(currentUser: user));
       case contacts:
         return MaterialPageRoute(builder: (_) => const Contacts());
+      case auth:
+        return MaterialPageRoute(builder: (_) => const AuthScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
@@ -35,3 +38,4 @@ const String event = '/event';
 const String qr = '/qr';
 const String profile = '/profile';
 const String contacts = '/contacts';
+const String auth = '/auth';

@@ -1,59 +1,59 @@
+import 'dart:convert';
+
 import 'event.dart';
 
 class User {
-  int? id;
+  late int id;
   String name;
   String surname;
   String phone;
   String? email;
   String? linkedin;
   String? company;
-  List<User>? contacts;
-  List<Event>? pastEvents;
+  List<int>? contacts;
 
   User(this.name, this.surname, this.phone,
       {email, linkedin, company, pastEvents, contacts});
 
   User.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
+      : id = json["ID"],
         name = json['name'],
         surname = json['surname'],
         phone = json['phone'],
         email = json['email'],
         linkedin = json['linkedin'],
         company = json['company'],
-        pastEvents = json['past_events'],
-        contacts = json['contacts'];
+        contacts = json['contacts']?.cast<int>()
+  ;
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "ID": id,
         "name": name,
         "surname": surname,
         "phone": phone,
         "email": email,
         "linkedin": linkedin,
         "company": company,
-        "past_events": pastEvents,
         "contacts": contacts
       };
 
-  void addContact(User u) {
+  String toJsonString() {
+    return jsonEncode(this);
+  }
+
+  void addContact(int id) {
     if (contacts == null) {
-      contacts = List<User>.filled(1, u);
+      contacts = List<int>.filled(1, id);
     } else {
-      contacts?.add(u);
+      contacts?.add(id);
     }
   }
 
-  List<User>? getContacts() {
+  List<int>? getContacts() {
     return contacts;
   }
 
   void deleteContact(int id) {
-    contacts?.removeWhere((user) => user.id == id);
-  }
-
-  List<Event>? getPastEvents() {
-    return pastEvents;
+    contacts?.remove(id);
   }
 }

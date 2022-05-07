@@ -1,14 +1,18 @@
+import 'package:business_wallet/screens/auth.dart';
 import 'package:flutter/material.dart';
+import 'controller/auth.dart';
 import 'model/user.dart';
-import 'screens/loginScreen.dart';
 import 'controller/router.dart';
 import 'screens/event.dart';
-import 'screens/qr.dart';
 import 'screens/contacts.dart';
 import 'screens/profile.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
-  runApp(const BusinessWallet());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => Auth()),
+  ], child: const BusinessWallet()));
 }
 
 class BusinessWallet extends StatefulWidget {
@@ -18,10 +22,37 @@ class BusinessWallet extends StatefulWidget {
   State<BusinessWallet> createState() => _BusinessWalletState();
 }
 
-class _BusinessWalletState extends State<BusinessWallet> {
-  bool loggedIn() {
-    //TODO Implement me!
-    return true;
+class _BusinessWalletState extends State<BusinessWallet> with WidgetsBindingObserver{
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        context.read<Auth>().checkLocal();
+
+        print("app in resumed");
+        break;
+      case AppLifecycleState.inactive:
+        print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        break;
+      case AppLifecycleState.detached:
+        print("app in detached");
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -29,7 +60,7 @@ class _BusinessWalletState extends State<BusinessWallet> {
     return MaterialApp(
       title: 'Business Wallet',
       onGenerateRoute: PageRouter.generateRoute,
-      home: loggedIn() ? const Base() : LoginScreen(),
+      home: context.watch<Auth>().loggedIn ? const Base() : const AuthScreen(),
     );
   }
 }
@@ -60,7 +91,9 @@ class _BaseState extends State<Base> {
       const Center(
         child: Text("find"),
       ),
-      Profile(currentUser: currentUser,),
+      Profile(
+        currentUser: currentUser,
+      )
     ];
 
     return screens[selectedTab];
@@ -99,7 +132,7 @@ class _BaseState extends State<Base> {
           children: <Widget>[
             IconButton(
               icon: const Icon(
-                Icons.menu,
+                Icons.qr_code_scanner_sharp,
                 color: Colors.black,
               ),
               onPressed: () {
@@ -117,7 +150,7 @@ class _BaseState extends State<Base> {
             ),
             IconButton(
               icon: const Icon(
-                Icons.print,
+                Icons.qr_code_scanner_rounded,
                 color: Colors.black,
               ),
               onPressed: () {
@@ -126,7 +159,7 @@ class _BaseState extends State<Base> {
             ),
             IconButton(
               icon: const Icon(
-                Icons.print,
+                Icons.person_outline_rounded,
                 color: Colors.black,
               ),
               onPressed: () {

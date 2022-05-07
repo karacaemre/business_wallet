@@ -1,24 +1,40 @@
 class Event {
   late int id;
   String name;
-  String? description;
-  List<int>? organizers;
+  String description;
+  late int organizer;
   List<int>? attendees;
+  DateTime start;
+  DateTime finish;
 
-  Event(this.name, {description, organizers, attendees});
+  Event(this.name, this.description, this.start, this.finish);
 
   Event.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
+      : id = json["ID"],
         name = json["name"],
         description = json["description"],
-        organizers = json["organizers"].cast<int>(),
-        attendees = json["attendees"].cast<int>();
+        organizer = json["organizer"],
+        attendees = json["attendees"].cast<int>(),
+        start = DateTime.parse(json["start"]),
+        finish = DateTime.parse(json["finish"]);
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
+  Map<String, dynamic> toJson() =>
+      {
+        "ID": id,
         "name": name,
         "description": description,
-        "organizers": organizers,
+        "organizer": organizer,
         "attendees": attendees,
+        "start": start.toUtc().toIso8601String(),
+        "finish": finish.toUtc().toIso8601String(),
+      };
+
+  Map<String, dynamic> toCreateRequest() =>
+      {
+        "name": name,
+        "description": description,
+        "start": start.toUtc().toIso8601String(),
+        "finish": finish.toUtc().toIso8601String(),
       };
 }
+

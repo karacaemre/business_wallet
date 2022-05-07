@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('user from json', () {
     String userJson =
-        '{"id":1,"name":"Ahmet","surname":"Şenharputlu","phone":"00901234567890",'
+        '{"ID":1,"name":"Ahmet","surname":"Şenharputlu","phone":"00901234567890",'
         '"email":"user@example.com","linkedin":"www.linkedin.com/in/example","company":"Business Wallet"}';
 
     User u = User.fromJson(json.decode(userJson));
@@ -28,9 +28,9 @@ void main() {
 
     User u2 = User("second", "user", "238641741097");
 
-    u.addContact(u2);
+    u.addContact(2);
 
-    List<User> expectedContactList = [u2];
+    List<int> expectedContactList = [2];
     expect(u.contacts, expectedContactList);
   });
 }
