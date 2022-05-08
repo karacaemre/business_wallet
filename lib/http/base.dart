@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class BaseHttp {
   String host = "http://localhost:4242";
   final tokenKey = "_token";
-  String token = "";
+  static late String token = "";
 
   Uri setUri(String path) {
     return Uri.parse(host + path);
@@ -22,8 +22,8 @@ class BaseHttp {
     return headers;
   }
 
-  Future<bool> verifyToken(String token) async {
-    this.token = token;
+  Future<bool> verifyToken(String t) async {
+    token = t;
     var url = setUri("/verify_token");
     final response = await http.post(url, headers: addHeaders(true));
 

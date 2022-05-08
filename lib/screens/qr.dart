@@ -1,13 +1,13 @@
+import 'package:business_wallet/http/remote.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QR extends StatelessWidget {
-  final String qrData;
+  const QR({Key? key}) : super(key: key);
 
-  const QR({Key? key, required this.qrData}) : super(key: key);
-
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -15,7 +15,7 @@ class QR extends StatelessWidget {
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               alignment: Alignment.centerRight,
               child: IconButton(
                 icon: const Icon(
@@ -23,14 +23,14 @@ class QR extends StatelessWidget {
                   color: Colors.black,
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, "Cancel");
                 },
               ),
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  CreateQr(qrData: qrData),
+                  CreateQr(qrData: Remote.user.toJson().toString()),
                   const ScanQrPage(),
                 ],
               ),

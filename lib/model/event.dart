@@ -18,8 +18,7 @@ class Event {
         start = DateTime.parse(json["start"]),
         finish = DateTime.parse(json["finish"]);
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "ID": id,
         "name": name,
         "description": description,
@@ -29,12 +28,10 @@ class Event {
         "finish": finish.toUtc().toIso8601String(),
       };
 
-  Map<String, dynamic> toCreateRequest() =>
-      {
+  Map<String, dynamic> toCreateRequest() => {
         "name": name,
         "description": description,
         "start": start.toUtc().toIso8601String(),
         "finish": finish.toUtc().toIso8601String(),
       };
 }
-

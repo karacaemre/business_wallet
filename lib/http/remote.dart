@@ -6,7 +6,9 @@ import '../model/user.dart';
 import '../util/pair.dart';
 
 class Remote extends BaseHttp {
-  Future<Result<User>> getMe() async {
+  static late User user;
+
+  Future<Result> getMe() async {
     String path = "/api/user/me";
     var response = await http.get(
       setUri(path),
@@ -16,15 +18,15 @@ class Remote extends BaseHttp {
     Map<String, dynamic> data = json.decode(response.body);
 
     if (response.statusCode != 200) {
-      return Result(null, Error(data["error"]));
+      return Result("", Error(data["error"]));
     }
 
-    User me = User.fromJson(data);
+    user = User.fromJson(data);
 
-    return Result(me, null);
+    return Result(user, null);
   }
 
-  Future<Result<Event>> createEvent(Event e) async {
+  Future<Result> createEvent(Event e) async {
     String path = "/api/event";
     var response = await http.post(
       setUri(path),
@@ -35,7 +37,7 @@ class Remote extends BaseHttp {
     Map<String, dynamic> data = json.decode(response.body);
 
     if (response.statusCode != 200) {
-      return Result(null, Error(data["error"]));
+      return Result("", Error(data["error"]));
     }
 
     Event event = Event.fromJson(data);
@@ -50,7 +52,7 @@ class Remote extends BaseHttp {
     var data = json.decode(response.body);
 
     if (response.statusCode != 200) {
-      return Result(null, Error(data["error"]));
+      return Result([], Error(data["error"]));
     }
 
     List<Event> pastEvents =
@@ -66,7 +68,7 @@ class Remote extends BaseHttp {
     var data = json.decode(response.body);
 
     if (response.statusCode != 200) {
-      return Result(null, Error(data["error"]));
+      return Result([], Error(data["error"]));
     }
 
     List<Event> activeEvents =
@@ -82,7 +84,7 @@ class Remote extends BaseHttp {
     var data = json.decode(response.body);
 
     if (response.statusCode != 200) {
-      return Result(null, Error(data["error"]));
+      return Result([], Error(data["error"]));
     }
 
     List<Event> currentEvents =
@@ -91,14 +93,14 @@ class Remote extends BaseHttp {
     return Result(currentEvents, null);
   }
 
-  Future<Result<Event>> getEvent(int id) async {
+  Future<Result> getEvent(int id) async {
     String path = "/api/event/$id";
     var response = await http.get(setUri(path), headers: addHeaders(true));
 
     var data = json.decode(response.body);
 
     if (response.statusCode != 200) {
-      return Result(null, Error(data["error"]));
+      return Result("", Error(data["error"]));
     }
 
     Event e = Event.fromJson(json.decode(response.body));
@@ -146,7 +148,7 @@ class Remote extends BaseHttp {
     var data = json.decode(response.body);
 
     if (response.statusCode != 200) {
-      return Result(null, Error(data["error"]));
+      return Result([], Error(data["error"]));
     }
 
     List<Event> eventTogether =

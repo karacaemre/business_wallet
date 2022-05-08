@@ -1,27 +1,190 @@
-import 'package:business_wallet/http/remote.dart';
+import 'package:business_wallet/model/event.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import '../http/remote.dart';
 
-import '../controller/auth.dart';
-
-class Event extends StatefulWidget {
-  const Event({Key? key}) : super(key: key);
+class EventPage extends StatefulWidget {
+  const EventPage({Key? key}) : super(key: key);
 
   @override
-  State<Event> createState() => _EventState();
+  State<EventPage> createState() => _EventPageState();
 }
 
-class _EventState extends State<Event> {
+class _EventPageState extends State<EventPage> {
+  Remote remote = Remote();
+  List<Event> activeEvents = [];
+  List<Event> pastEvents = [];
+  List<Event> currentEvents = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    getActiveEvents().then((value) => setState(() {
+          activeEvents = value.data;
+        }));
+
+    getCurrentEvents().then((value) => setState(() {
+          currentEvents = value.data;
+        }));
+
+    getPastEvents().then((value) => setState(() {
+          pastEvents = value.data;
+        }));
+  }
+
+  getActiveEvents() async {
+    return await remote.activeEvents();
+  }
+
+  getCurrentEvents() async {
+    return await remote.currentEvents();
+  }
+
+  getPastEvents() async {
+    return await remote.pastEvents();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          //child: Text("this is event screen\n ${Remote().token}"),
-          child: Text("this is event screen\n dlkşsnf"),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        extendBodyBehindAppBar: false,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: const Text(
+            "Event",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+          bottom: TabBar(
+            padding: const EdgeInsets.all(10),
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              color: Colors.black,
+            ),
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.black,
+            tabs: const [
+              Tab(child: Text("active")),
+              Tab(child: Text("my events")),
+            ],
+          ),
         ),
-        Text("${context.read<Auth>().loggedIn}")
-      ],
+        body: TabBarView(
+          children: [
+            _getListBox(activeEvents, "active"),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _getListBox(currentEvents, "current"),
+                _getListBox(pastEvents, "past"),
+              ],
+            )
+          ],
+        ),
+        floatingActionButton: _newEventButton(context),
+      ),
     );
+  }
+
+  Widget _newEventButton(context) {
+    String input = "";
+    return FloatingActionButton(
+      heroTag: context.toString(),
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      onPressed: () => showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          title: const Text('New Event'),
+          content: TextField(
+            onChanged: (value) {
+              input = value;
+            },
+            decoration: const InputDecoration(hintText: "Event name"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                input == ""
+                    ? null
+                    : setState(() {
+                        /* TODO
+                        createEvent(input)
+                            ? Navigator.pop(context, 'Add')
+                            : null;
+
+                       */
+                      });
+              },
+              child: const Text(
+                'Add',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        ),
+      ),
+      // Respond to button press
+      child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _getListBox(List<Event> e, String head) {
+    if (e.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return SizedBox(
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: e.length,
+          itemBuilder: (context, index) {
+            return Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              child: ListTile(
+                tileColor: Colors.black87,
+                leading: const Icon(Icons.event, color: Colors.white),
+                //same over here
+                title: Text(
+                  e[index].description,
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                ),
+
+                trailing: IconButton(
+                  icon:
+                      const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                  onPressed: () {
+                    /*
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventDetailsPage(
+                    );
+                    */
+                  },
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
   }
 }

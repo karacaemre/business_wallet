@@ -6,7 +6,7 @@ class Pair<T1, T2> {
 }
 
 class Result<T> {
-  T? data;
+  T data;
   Error? error;
 
   Result(this.data, this.error);
@@ -23,7 +23,7 @@ class Result<T> {
 class Error {
   final String error;
 
-  String get getString{
+  String get getString {
     return error;
   }
 

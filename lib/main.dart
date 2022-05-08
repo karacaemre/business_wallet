@@ -1,9 +1,8 @@
 import 'package:business_wallet/screens/auth.dart';
+import 'package:business_wallet/screens/event.dart';
 import 'package:flutter/material.dart';
 import 'controller/auth.dart';
-import 'model/user.dart';
 import 'controller/router.dart';
-import 'screens/event.dart';
 import 'screens/contacts.dart';
 import 'screens/profile.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +21,8 @@ class BusinessWallet extends StatefulWidget {
   State<BusinessWallet> createState() => _BusinessWalletState();
 }
 
-class _BusinessWalletState extends State<BusinessWallet> with WidgetsBindingObserver{
-
+class _BusinessWalletState extends State<BusinessWallet>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -75,9 +74,6 @@ class Base extends StatefulWidget {
 class _BaseState extends State<Base> {
   int selectedTab = 0;
 
-  // TODO
-  late User currentUser;
-
   setIndex(int i) {
     setState(() {
       selectedTab = i;
@@ -86,14 +82,12 @@ class _BaseState extends State<Base> {
 
   getSelectedTab() {
     var screens = [
-      const Event(),
+      const EventPage(),
       const Contacts(),
       const Center(
         child: Text("find"),
       ),
-      Profile(
-        currentUser: currentUser,
-      )
+      const Profile()
     ];
 
     return screens[selectedTab];
@@ -102,7 +96,6 @@ class _BaseState extends State<Base> {
   @override
   void initState() {
     super.initState();
-    currentUser = User("Ahmet", "Şenharputlu", "1099981240124");
   }
 
   @override
@@ -111,12 +104,10 @@ class _BaseState extends State<Base> {
       backgroundColor: Colors.white,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.qr_code),
-        onPressed: () {
-          Navigator.pushNamed(context, "/qr",
-              arguments: currentUser.toJson().toString());
-        },
-      ),
+          child: const Icon(Icons.qr_code),
+          onPressed: () {
+            Navigator.pushNamed(context, "/qr");
+          }),
       body: getSelectedTab(),
       bottomNavigationBar: BottomAppBar(
         //bottom navigation bar on scaffold
