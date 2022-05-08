@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'event.dart';
-
 class User {
   late int id;
   String name;
@@ -23,8 +21,7 @@ class User {
         email = json['email'],
         linkedin = json['linkedin'],
         company = json['company'],
-        contacts = json['contacts']?.cast<int>()
-  ;
+        contacts = json['contacts']?.cast<int>();
 
   Map<String, dynamic> toJson() => {
         "ID": id,

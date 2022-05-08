@@ -21,7 +21,6 @@ void main() {
     });
 
     test("add contact", () async {
-
       debugPrint("${me!.contacts}");
 
       var resp = await r.addContact(me!.id + 2);

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:business_wallet/model/user.dart';
 import 'package:flutter_test/flutter_test.dart';
 
