@@ -57,6 +57,7 @@ class _BusinessWalletState extends State<BusinessWallet>
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Business Wallet',
       onGenerateRoute: PageRouter.generateRoute,
       home: context.watch<Auth>().loggedIn ? const Base() : const AuthScreen(),
@@ -101,6 +102,15 @@ class _BaseState extends State<Base> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          bottomOpacity: 0.0,
+          elevation: 0.0,
+          centerTitle: true,
+          title: const Text("Business Wallet"),
+          leading: Padding(
+            padding: EdgeInsets.all(10),
+            child: Image.asset("assets/images/logo.png"),
+          )),
       backgroundColor: Colors.white,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
