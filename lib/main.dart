@@ -5,6 +5,7 @@ import 'controller/auth.dart';
 import 'controller/router.dart';
 import 'screens/contacts.dart';
 import 'screens/profile.dart';
+import 'screens/event_calendar.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -85,9 +86,7 @@ class _BaseState extends State<Base> {
     var screens = [
       const EventPage(),
       const Contacts(),
-      const Center(
-        child: Text("find"),
-      ),
+      const EventCalendar(),
       const Profile()
     ];
 

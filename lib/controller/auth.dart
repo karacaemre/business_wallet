@@ -28,8 +28,8 @@ class Auth extends ChangeNotifier {
       return;
     }
 
-    user = result.data;
     setLoggedIn(ret);
+    user = result.data;
   }
 
   Future<Error?> login(String email, password) async {
