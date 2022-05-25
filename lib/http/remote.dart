@@ -157,6 +157,19 @@ class Remote extends BaseHttp {
     return Result(eventTogether, null);
   }
 
+  Future<Result> getContact(int id) async {
+    String path = "/api/user/contact/$id";
+    var response = await http.get(setUri(path), headers: addHeaders(true));
+    var data = json.decode(response.body);
+
+    if (response.statusCode != 200) {
+      return Result("", Error(data["error"]));
+    }
+    User u = User.fromJson(json.decode(response.body));
+
+    return Result(u, null);
+  }
+
   Future<Result<bool>> addContact(int id) async {
     String path = "/api/user/contact/$id";
     var response = await http.post(setUri(path), headers: addHeaders(true));
