@@ -17,8 +17,6 @@ class _EventCalendarState extends State<EventCalendar> {
 
   Remote remote = Remote();
   List<Event> allAttendedEvents = [];
-  List<Event> a = [];
-  List<Event> b = [];
 
   List<Event> eventsPerDay = [];
 
@@ -27,12 +25,11 @@ class _EventCalendarState extends State<EventCalendar> {
     super.initState();
 
     getCurrentEvents().then((value) => setState(() {
-          allAttendedEvents.add(value.data);
-          a = value.data;
+          allAttendedEvents.addAll(value.data);
         }));
 
     getPastEvents().then((value) => setState(() {
-          allAttendedEvents.add(value.data);
+          allAttendedEvents.addAll(value.data);
         }));
   }
 
@@ -53,13 +50,6 @@ class _EventCalendarState extends State<EventCalendar> {
             i.start.month == newDate.month &&
             i.start.day == newDate.day)
         .toList();
-    // print("eventsperday:");
-    // print(eventsPerDay.length);
-    // print("allattendedevents:");
-    // print(allAttendedEvents.length);
-    // print(date);
-    // print(newDate);
-    // print(a.length);
     return eventsPerDay;
   }
 
