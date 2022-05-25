@@ -1,4 +1,6 @@
 import 'package:business_wallet/model/event.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import '../http/remote.dart';
 
@@ -14,6 +16,8 @@ class _EventPageState extends State<EventPage> {
   List<Event> activeEvents = [];
   List<Event> pastEvents = [];
   List<Event> currentEvents = [];
+
+  Event newEvent = Event("", "", DateTime.now(), DateTime.now());
 
   @override
   void initState() {
@@ -92,7 +96,6 @@ class _EventPageState extends State<EventPage> {
   }
 
   Widget _newEventButton(context) {
-    String input = "";
     return FloatingActionButton(
       heroTag: context.toString(),
       backgroundColor: Colors.white,
@@ -104,11 +107,66 @@ class _EventPageState extends State<EventPage> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           title: const Text('New Event'),
-          content: TextField(
-            onChanged: (value) {
-              input = value;
-            },
-            decoration: const InputDecoration(hintText: "Event name"),
+          content: Column(
+            children: [
+              TextField(
+                onChanged: (value) {
+                  newEvent.name = value;
+                },
+                decoration: const InputDecoration(hintText: "Event name"),
+              ),
+              TextField(
+                onChanged: (value) {
+                  newEvent.description = value;
+                },
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: const InputDecoration(hintText: "Description"),
+              ),
+              //organizer zaten kullanıcının kendisi, texfielda gerek yok
+              DateTimeField(
+                format: DateFormat('dd-MM-yyyy HH:mm'),
+                decoration: const InputDecoration(hintText: "Start Time"),
+                onShowPicker: (context, currentValue) async {
+                  final date = await showDatePicker(
+                      context: context,
+                      initialDate: currentValue ?? DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100));
+                  if (date != null) {
+                    final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()));
+                    newEvent.start = DateTimeField.combine(date, time);
+                    return DateTimeField.combine(date, time);
+                  } else {
+                    return currentValue;
+                  }
+                },
+              ),
+              DateTimeField(
+                format: DateFormat('dd-MM-yyyy HH:mm'),
+                decoration: const InputDecoration(hintText: "Finish Time"),
+                onShowPicker: (context, currentValue) async {
+                  final date = await showDatePicker(
+                      context: context,
+                      initialDate: currentValue ?? DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2050));
+                  if (date != null) {
+                    final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()));
+                    newEvent.finish = DateTimeField.combine(date, time);
+                    return DateTimeField.combine(date, time);
+                  } else {
+                    return currentValue;
+                  }
+                },
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
@@ -120,16 +178,22 @@ class _EventPageState extends State<EventPage> {
             ),
             TextButton(
               onPressed: () {
-                input == ""
-                    ? null
-                    : setState(() {
-                        /* TODO
-                        createEvent(input)
-                            ? Navigator.pop(context, 'Add')
-                            : null;
+                setState(() {
+                  remote.createEvent(newEvent);
 
-                       */
-                      });
+                  getActiveEvents().then((value) => setState(() {
+                        activeEvents = value.data;
+                      }));
+
+                  getCurrentEvents().then((value) => setState(() {
+                        currentEvents = value.data;
+                      }));
+
+                  getPastEvents().then((value) => setState(() {
+                        pastEvents = value.data;
+                      }));
+                });
+                Navigator.pop(context, 'Add');
               },
               child: const Text(
                 'Add',
@@ -164,6 +228,10 @@ class _EventPageState extends State<EventPage> {
                 //same over here
                 title: Text(
                   e[index].description,
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                subtitle: Text(
+                  e[index].start.toString(),
                   style: const TextStyle(color: Colors.white, fontSize: 20),
                 ),
 
