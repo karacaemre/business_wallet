@@ -123,16 +123,18 @@ class _AuthScreenState extends State<AuthScreen> {
     final TextEditingController _surnameController = TextEditingController();
     final TextEditingController _passwordAgainController =
         TextEditingController();
+    final TextEditingController _positionController = TextEditingController();
     final TextEditingController _phoneController = TextEditingController();
     final TextEditingController _linkedinController = TextEditingController();
     final TextEditingController _companyController = TextEditingController();
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          color: Colors.black,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Colors.black,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -167,6 +169,10 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(
                 height: 15,
               ),
+              textItem("Position", _positionController, false),
+              const SizedBox(
+                height: 15,
+              ),
               textItem("Phone", _phoneController, false),
               const SizedBox(
                 height: 15,
@@ -187,6 +193,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       _surnameController.text,
                       _emailController.text,
                       _passwordController.text,
+                      position: _positionController.text,
                       phone: _phoneController.text,
                       linkedin: _linkedinController.text,
                       company: _companyController.text,

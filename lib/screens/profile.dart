@@ -45,7 +45,7 @@ class _ProfileState extends State<Profile> {
                   height: 5,
                 ),
                 Text(
-                  'Job Title',
+                  Remote.user.position ?? "",
                   style: TextStyle(
                     color: Colors.grey.shade400,
                   ),
@@ -96,48 +96,48 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Icon(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Icon(
                           CupertinoIcons.phone,
                           color: Colors.blue.shade400,
                           size: 18,
                         ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'PHONE',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.15,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(
-                                      Remote.user.phone,
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        letterSpacing: 1.0,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'PHONE',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.15,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  Remote.user.phone,
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    letterSpacing: 1.0,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
@@ -220,45 +220,44 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     child: Row(
-                        children: <Widget>[
-                          Expanded(
+                      children: <Widget>[
+                        Expanded(
                             flex: 1,
                             child: Icon(FontAwesomeIcons.linkedinIn,
-                                  color: Colors.blue.shade400, size: 16.0)
+                                color: Colors.blue.shade400, size: 16.0)),
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'LINKEDIN',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1.15,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text(
+                                    Remote.user.linkedin ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      letterSpacing: 1.0,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'LINKEDIN',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.15,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(
-                                      Remote.user.linkedin ?? "",
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        letterSpacing: 1.0,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(

@@ -5,18 +5,20 @@ class User {
   String name;
   String surname;
   String phone;
+  String? position;
   String? email;
   String? linkedin;
   String? company;
   List<int>? contacts;
 
   User(this.name, this.surname, this.phone,
-      {email, linkedin, company, pastEvents, contacts});
+      {position, email, linkedin, company, pastEvents, contacts});
 
   User.fromJson(Map<String, dynamic> json)
       : id = json["ID"],
         name = json['name'],
         surname = json['surname'],
+        position = json['position'],
         phone = json['phone'],
         email = json['email'],
         linkedin = json['linkedin'],
@@ -27,6 +29,7 @@ class User {
         "ID": id,
         "name": name,
         "surname": surname,
+        "position": position,
         "phone": phone,
         "email": email,
         "linkedin": linkedin,

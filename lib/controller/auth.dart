@@ -49,12 +49,13 @@ class Auth extends ChangeNotifier {
   }
 
   Future<Error?> register(String name, surname, email, password,
-      {phone, linkedin, company}) async {
+      {position, phone, linkedin, company}) async {
     var result = await remote.register(<String, dynamic>{
       "name": name,
       "surname": surname,
       "email": email,
       "password": password,
+      "position": position,
       "phone": phone,
       "linkedin": linkedin,
       "company": company
