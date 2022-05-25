@@ -8,14 +8,14 @@ import '../model/user.dart';
 
 class ContactDetails extends StatefulWidget {
   User? user;
-  ContactDetails(this.user);
+  int id;
+  ContactDetails(this.id);
 
   @override
   State<ContactDetails> createState() => _ContactDetailsState();
 }
 
 class _ContactDetailsState extends State<ContactDetails> {
-  late int id;
   String? name;
   String? surname;
   String? phone;
@@ -26,11 +26,15 @@ class _ContactDetailsState extends State<ContactDetails> {
 
   @override
   void initState() {
+    addContact();
+    deleteContact();
+    checkEventsTogether();
     super.initState();
   }
 
   addContact() {}
   deleteContact() {}
+  checkEventsTogether() {}
 
   @override
   Widget build(BuildContext context) {
@@ -40,85 +44,203 @@ class _ContactDetailsState extends State<ContactDetails> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           color: Colors.white,
-          child: CustomPaint(
-            painter: CurvePainter(),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.12,
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.12,
+              ),
+              Text(
+                Remote.user.name + " " + Remote.user.surname,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  letterSpacing: 1.15,
                 ),
-                Text(
-                  Remote.user.name + " " + Remote.user.surname,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                    letterSpacing: 1.15,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Job Title',
-                  style: TextStyle(
-                    color: Colors.grey.shade400,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.12,
-                ),
-                Divider(
-                  thickness: 1.15,
-                  indent: MediaQuery.of(context).size.width * 0.1,
-                  endIndent: MediaQuery.of(context).size.width * 0.1,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                'Job Title',
+                style: TextStyle(
                   color: Colors.grey.shade400,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.12,
-                      height: 20,
+              ),
+              const SizedBox(
+                height: 3,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.12,
+              ),
+              Divider(
+                thickness: 1.15,
+                indent: MediaQuery.of(context).size.width * 0.1,
+                endIndent: MediaQuery.of(context).size.width * 0.1,
+                color: Colors.grey.shade400,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.12,
+                    height: 20,
+                  ),
+                  const Text(
+                    'OVERVIEW',
+                    style: TextStyle(
+                      fontSize: 14,
+                      letterSpacing: 1.15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const Text(
-                      'OVERVIEW',
-                      style: TextStyle(
-                        fontSize: 14,
-                        letterSpacing: 1.15,
-                        fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.7,
+                padding: EdgeInsets.fromLTRB(20, 3, 1, 3),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  border: Border.all(color: Colors.grey.shade200),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Icon(
+                        CupertinoIcons.phone,
+                        color: Colors.blue.shade400,
+                        size: 18,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'PHONE',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.15,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Text(
+                                Remote.user.phone,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  letterSpacing: 1.0,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    padding: const EdgeInsets.fromLTRB(20, 3, 1, 3),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                      color: Colors.grey.shade100,
+                      border: Border.all(
+                        color: Colors.grey.shade200,
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Icon(
+                            CupertinoIcons.mail,
+                            color: Colors.blue.shade400,
+                            size: 16,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Column(
+                            children: <Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'EMAIL',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1.15,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
+                                  Text(
+                                    Remote.user.email ?? "",
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      letterSpacing: 1.0,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Container(
                   width: MediaQuery.of(context).size.width * 0.7,
                   padding: EdgeInsets.fromLTRB(20, 3, 1, 3),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    border: Border.all(color: Colors.grey.shade200),
                     borderRadius: const BorderRadius.all(
                       Radius.circular(20),
+                    ),
+                    color: Colors.grey.shade100,
+                    border: Border.all(
+                      color: Colors.grey.shade200,
+                      width: 1,
                     ),
                   ),
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        flex: 1,
-                        child: Icon(
-                          CupertinoIcons.phone,
-                          color: Colors.blue.shade400,
-                          size: 18,
-                        ),
-                      ),
+                          flex: 1,
+                          child: Icon(FontAwesomeIcons.linkedinIn,
+                              color: Colors.blue.shade400, size: 16.0)),
                       Expanded(
                         flex: 5,
                         child: Column(
@@ -127,7 +249,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'PHONE',
+                                  'LINKEDIN',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
@@ -138,7 +260,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                                   height: 3,
                                 ),
                                 Text(
-                                  Remote.user.phone,
+                                  Remote.user.linkedin ?? "",
                                   style: const TextStyle(
                                     color: Colors.grey,
                                     letterSpacing: 1.0,
@@ -153,138 +275,17 @@ class _ContactDetailsState extends State<ContactDetails> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      padding: const EdgeInsets.fromLTRB(20, 3, 1, 3),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                        color: Colors.grey.shade100,
-                        border: Border.all(
-                          color: Colors.grey.shade200,
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Icon(
-                              CupertinoIcons.mail,
-                              color: Colors.blue.shade400,
-                              size: 16,
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child: Column(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'EMAIL',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.15,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(
-                                      Remote.user.email ?? "",
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        letterSpacing: 1.0,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
-                const SizedBox(
-                  height: 10,
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    padding: EdgeInsets.fromLTRB(20, 3, 1, 3),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                      color: Colors.grey.shade100,
-                      border: Border.all(
-                        color: Colors.grey.shade200,
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                            flex: 1,
-                            child: Icon(FontAwesomeIcons.linkedinIn,
-                                color: Colors.blue.shade400, size: 16.0)),
-                        Expanded(
-                          flex: 5,
-                          child: Column(
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'LINKEDIN',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1.15,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                    Remote.user.linkedin ?? "",
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      letterSpacing: 1.0,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.read<Auth>().logout();
-                  },
-                  child: const Text("Sign Out"),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<Auth>().logout();
+                },
+                child: const Text("Sign Out"),
+              ),
+            ],
           ),
         ),
       ),
