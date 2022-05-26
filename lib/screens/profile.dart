@@ -108,6 +108,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(
                         flex: 5,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,6 +171,7 @@ class _ProfileState extends State<Profile> {
                           Expanded(
                             flex: 5,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,6 +230,7 @@ class _ProfileState extends State<Profile> {
                         Expanded(
                           flex: 5,
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
