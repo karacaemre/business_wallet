@@ -3,6 +3,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import '../http/remote.dart';
+import 'event_details.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({Key? key}) : super(key: key);
@@ -239,13 +240,11 @@ class _EventPageState extends State<EventPage> {
                   icon:
                       const Icon(Icons.arrow_forward_ios, color: Colors.white),
                   onPressed: () {
-                    /*
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EventDetailsPage(
-                    );
-                    */
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                EventDetails(event: e[index])));
                   },
                 ),
               ),

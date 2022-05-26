@@ -2,6 +2,7 @@ import 'package:business_wallet/model/event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../http/remote.dart';
+import 'event_details.dart';
 
 class EventCalendar extends StatefulWidget {
   const EventCalendar({Key? key}) : super(key: key);
@@ -43,12 +44,12 @@ class _EventCalendarState extends State<EventCalendar> {
 
   List<Event> _getEventsFromDay(DateTime date) {
     //burada spesifik tarihteki eventler döndürülecek
-    DateTime newDate = DateTime(date.year, date.month, date.day);
+    DateTime theDate = DateTime(date.year, date.month, date.day);
     eventsPerDay = allAttendedEvents
         .where((i) =>
-            i.start.year == newDate.year &&
-            i.start.month == newDate.month &&
-            i.start.day == newDate.day)
+            i.start.year == theDate.year &&
+            i.start.month == theDate.month &&
+            i.start.day == theDate.day)
         .toList();
     return eventsPerDay;
   }
@@ -109,13 +110,10 @@ class _EventCalendarState extends State<EventCalendar> {
             trailing: IconButton(
               icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
               onPressed: () {
-                /*
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EventDetailsPage(
-                    );
-                    */
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EventDetails(event: e)));
               },
             ),
           ),

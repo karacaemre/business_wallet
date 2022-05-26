@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'dart:convert';
+import '../model/user.dart';
 
 class QR extends StatelessWidget {
   const QR({Key? key}) : super(key: key);
@@ -95,6 +97,7 @@ class ScanQrPage extends StatefulWidget {
 
 class _ScanQrPageState extends State<ScanQrPage> {
   Barcode? result;
+  User? contactInfo;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -103,6 +106,12 @@ class _ScanQrPageState extends State<ScanQrPage> {
     controller.scannedDataStream.listen((scanData) {
       setState(() => result = scanData);
     });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
   }
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -118,7 +127,9 @@ class _ScanQrPageState extends State<ScanQrPage> {
   }
 
   void readQr() async {
+    String newPossibleContact = result!.code.toString();
     if (result != null) {
+      contactInfo = json.decode(newPossibleContact);
       controller!.pauseCamera();
       controller!.dispose();
     }
@@ -127,22 +138,50 @@ class _ScanQrPageState extends State<ScanQrPage> {
   @override
   Widget build(BuildContext context) {
     readQr();
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-        borderColor: Colors.orange,
-        borderRadius: 10,
-        borderLength: 30,
-        borderWidth: 10,
-        cutOutSize: 250,
-      ),
+    return Stack(
+      children: <Widget>[
+        QRView(
+          key: qrKey,
+          onQRViewCreated: _onQRViewCreated,
+          overlay: QrScannerOverlayShape(
+            borderColor: Colors.orange,
+            borderRadius: 10,
+            borderLength: 30,
+            borderWidth: 10,
+            cutOutSize: 250,
+          ),
+        ),
+        Positioned(bottom: 10, child: scanResult())
+      ],
     );
   }
 
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
+  Widget scanResult() => Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: <Widget>[
+          Text(
+            result != null ? 'Result: ${result!.code}' : "Scan a QR Code",
+            maxLines: 3,
+          ),
+          Row(
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 20)),
+                onPressed: () {},
+                child: const Text('Add to Contacts'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 20)),
+                onPressed: null,
+                child: const Text(''),
+              ),
+            ],
+          ),
+        ],
+      ));
 }
