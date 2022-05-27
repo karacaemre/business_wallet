@@ -5,6 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import '../controller/auth.dart';
 import '../model/user.dart';
+import '../http/remote.dart';
+import '../model/user.dart';
+import 'contacts.dart';
 
 class ContactDetails extends StatefulWidget {
   User? user;
@@ -16,6 +19,7 @@ class ContactDetails extends StatefulWidget {
 }
 
 class _ContactDetailsState extends State<ContactDetails> {
+  User? user;
   String? name;
   String? surname;
   String? phone;
@@ -23,17 +27,38 @@ class _ContactDetailsState extends State<ContactDetails> {
   String? linkedin;
   String? company;
   List<int>? contacts;
+  late List<int> contactList = [];
 
   @override
   void initState() {
-    addContact();
-    deleteContact();
     checkEventsTogether();
     super.initState();
   }
 
-  addContact() {}
-  deleteContact() {}
+  addContact(String name) {
+    // Contact c = Contact(name);
+    //
+    // for (Contact ctg in contactList) {
+    //   if (ctg.name == name) {
+    //     return false;
+    //   }
+    // }
+
+    // TODO add remote
+
+    // contactList.add(c);
+    return true;
+  }
+
+  deleteContact(int index) {
+    // Storage().deleteContact(contactList[index]);
+    Remote().deleteContact(contactList[index]);
+
+    setState(() {
+      contactList = List.from(contactList)..removeAt(index);
+    });
+  }
+
   checkEventsTogether() {}
 
   @override
