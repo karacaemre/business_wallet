@@ -6,13 +6,13 @@ import 'package:provider/provider.dart';
 import '../controller/auth.dart';
 import '../model/user.dart';
 import '../http/remote.dart';
-import '../model/user.dart';
+import '../model/event.dart';
 import 'contacts.dart';
 
 class ContactDetails extends StatefulWidget {
-  User? user;
   int id;
-  ContactDetails(this.id);
+
+  ContactDetails({Key? key, required this.id}) : super(key: key);
 
   @override
   State<ContactDetails> createState() => _ContactDetailsState();
@@ -20,19 +20,26 @@ class ContactDetails extends StatefulWidget {
 
 class _ContactDetailsState extends State<ContactDetails> {
   User? user;
-  String? name;
-  String? surname;
-  String? phone;
-  String? email;
-  String? linkedin;
-  String? company;
-  List<int>? contacts;
-  late List<int> contactList = [];
+  Event? event;
+  Remote remote = Remote();
 
   @override
   void initState() {
-    checkEventsTogether();
     super.initState();
+    getContactInfo().then((value) => setState(() {
+          user = value.data;
+        }));
+    getEventsTogether().then((value) => setState(() {
+          event = value.data;
+        }));
+  }
+
+  getContactInfo() async {
+    return await remote.getContact(widget.id);
+  }
+
+  getEventsTogether() async {
+    return await remote.eventTogether(widget.id);
   }
 
   addContact(String name) {
@@ -52,14 +59,12 @@ class _ContactDetailsState extends State<ContactDetails> {
 
   deleteContact(int index) {
     // Storage().deleteContact(contactList[index]);
-    Remote().deleteContact(contactList[index]);
-
-    setState(() {
-      contactList = List.from(contactList)..removeAt(index);
-    });
+    // Remote().deleteContact(contactList[index]);
+    //
+    // setState(() {
+    //   contactList = List.from(contactList).removeAt(index);
+    // });
   }
-
-  checkEventsTogether() {}
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +80,8 @@ class _ContactDetailsState extends State<ContactDetails> {
                 height: MediaQuery.of(context).size.height * 0.12,
               ),
               Text(
-                Remote.user.name + " " + Remote.user.surname,
+                "Emre Karaca",
+                // user?.name ?? ""user?.surname ?? "",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
@@ -301,14 +307,36 @@ class _ContactDetailsState extends State<ContactDetails> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.12,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  context.read<Auth>().logout();
-                },
-                child: const Text("Sign Out"),
+              Divider(
+                thickness: 1.15,
+                indent: MediaQuery.of(context).size.width * 0.1,
+                endIndent: MediaQuery.of(context).size.width * 0.1,
+                color: Colors.grey.shade400,
+              ),
+              const Text(
+                'Events You Have Attended Together',
+                style: TextStyle(
+                  fontSize: 20,
+                  letterSpacing: 1.15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                child: ListTile(
+                  tileColor: Colors.black87,
+                  leading: const Icon(Icons.event, color: Colors.white),
+                  //same over here
+                  title: Text(
+                    "${event?.name}",
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
               ),
             ],
           ),

@@ -173,7 +173,7 @@ class _ContactsPageState extends State<Contacts> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            ContactDetails(contactList[index]),
+                            ContactDetails(id: contactList[index]),
                       ),
                     );
                   },
