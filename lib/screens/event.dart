@@ -228,11 +228,7 @@ class _EventPageState extends State<EventPage> {
                 leading: const Icon(Icons.event, color: Colors.white),
                 //same over here
                 title: Text(
-                  e[index].description,
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                subtitle: Text(
-                  e[index].start.toString(),
+                  e[index].name,
                   style: const TextStyle(color: Colors.white, fontSize: 20),
                 ),
 

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:business_wallet/controller/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -15,9 +17,11 @@ class EventDetails extends StatefulWidget {
 
 class _EventDetailsState extends State<EventDetails> {
   Remote remote = Remote();
-  User contactInfo = User("", "", "");
-  List<String> attendees = [];
-  bool isAttending = true;
+  User organizerInfo = User("", "", "");
+  List<int> commonAttendees = [];
+  List<User> commonAttendeesInfo = [];
+  // List<String> attendees = [];
+  late bool isAttending;
   List<String> months = [
     "January",
     "February",
@@ -38,29 +42,58 @@ class _EventDetailsState extends State<EventDetails> {
     "Wednesday",
     "Thursday",
     "Thursday",
-    "Friday"
+    "Friday",
+    "Saturday",
+    "Sunday"
   ];
 
   @override
   void initState() {
     super.initState();
 
+    isAttending = checkIfAttending();
+
     getContactInfo(widget.event.organizer).then((value) => setState(() {
-          contactInfo = value.data;
+          organizerInfo = value.data;
         }));
+
+    for (var contact in Remote.user.contacts!) {
+      if (widget.event.attendees!.contains(contact)) {
+        commonAttendees.add(contact);
+      }
+    }
+
+    for (var contactId in commonAttendees) {
+      getContactInfo(contactId).then((value) => setState(() {
+            commonAttendeesInfo.add(value.data);
+          }));
+    }
   }
 
-  getContactInfo(int number) async {
-    return await remote.getContact(number);
+  getContactInfo(int id) async {
+    return await remote.getContact(id);
   }
 
-  List<String> getAttendeeNames(List<int> contactNumbers) {
-    List<String> nameList = [];
-    List<User> users = [];
-    contactNumbers.map(
-      (e) => users.add(getContactInfo(e)),
-    );
-    return nameList;
+  bool checkIfAttending() {
+    bool status = false;
+    widget.event.attendees?.forEach((element) {
+      if (element == Remote.user.id) status = true;
+    });
+    return status;
+  }
+
+  manageAttendingStatus(bool status, int eventId) async {
+    if (status == true) {
+      await remote.leaveEvent(eventId);
+      setState(() {
+        isAttending = false;
+      });
+    } else {
+      await remote.attendEvent(eventId);
+      setState(() {
+        isAttending = true;
+      });
+    }
   }
 
   @override
@@ -73,14 +106,12 @@ class _EventDetailsState extends State<EventDetails> {
         title: const Text("Business Wallet"),
       ),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        padding: EdgeInsets.all(40),
+        padding: const EdgeInsets.all(40),
         child: SafeArea(
           child: Column(
             children: <Widget>[
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: Column(
                   children: [
                     Text(widget.event.name,
@@ -89,7 +120,7 @@ class _EventDetailsState extends State<EventDetails> {
                             fontWeight: FontWeight.bold,
                             color: Colors.blue.shade500)),
                     Text(
-                        "Organizer: ${contactInfo.name} ${contactInfo.surname}"),
+                        "Organizer: ${organizerInfo.name} ${organizerInfo.surname}"),
                     const SizedBox(
                       height: 25,
                     ),
@@ -102,25 +133,13 @@ class _EventDetailsState extends State<EventDetails> {
                       height: 20,
                     ),
                     Text(
-                        "Start Time: ${widget.event.start.hour}:${widget.event.start.minute}",
+                        "Start: ${widget.event.start.hour}:${widget.event.start.minute} - ${widget.event.start.day} ${months[widget.event.start.month]} ${weekDays[widget.event.start.weekday]}",
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         )),
                     Text(
-                        "Start Date: ${widget.event.start.day} ${months[widget.event.start.month]} ${weekDays[widget.event.start.weekday]}",
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        )),
-                    Text(
-                        "End Time: ${widget.event.finish.hour}:${widget.event.finish.minute}",
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        )),
-                    Text(
-                        "End Date: ${widget.event.finish.day} ${months[widget.event.finish.month]} ${weekDays[widget.event.finish.weekday]}",
+                        "Finish: ${widget.event.finish.hour}:${widget.event.finish.minute} - ${widget.event.finish.day} ${months[widget.event.finish.month]} ${weekDays[widget.event.finish.weekday]}",
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -128,13 +147,16 @@ class _EventDetailsState extends State<EventDetails> {
                     const SizedBox(
                       height: 35,
                     ),
-                    // TODO henüz fonksiyonlar eklenmedi
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          primary:
+                              isAttending ? Colors.red.shade300 : Colors.blue,
                           textStyle: const TextStyle(fontSize: 20)),
-                      onPressed: () {},
+                      onPressed: () {
+                        manageAttendingStatus(isAttending, widget.event.id);
+                      },
                       child: Text(
-                        isAttending == true ? 'Vazgeç' : "Katıl",
+                        isAttending == true ? 'Katılmaktan Vazgeç' : "Katıl",
                         maxLines: 3,
                       ),
                     ),
@@ -142,34 +164,75 @@ class _EventDetailsState extends State<EventDetails> {
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Column(
                   children: [
-                    Text("Katılımcılar",
+                    Text("Tanıdığın Katılımcılar",
                         style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             color: Colors.blue.shade500)),
-                    //           ...getAttendeeNames(widget.event.attendees).map(
-                    // (Event e) => ListTile(
-                    //   tileColor: Colors.black87,
-                    //   leading: const Icon(Icons.event, color: Colors.white),
-                    //   //same over here
-                    //   title: Text(
-                    //     e.description,
-                    //     style: const TextStyle(color: Colors.white, fontSize: 20),
-                    //   ),
+                    SizedBox(
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: commonAttendeesInfo.length,
+                        itemBuilder: (context, index) {
+                          return Slidable(
+                            key: ValueKey(widget.event.attendees?[index]),
+                            closeOnScroll: true,
+                            child: Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: ListTile(
+                                tileColor: Colors.white,
+                                leading: const Icon(Icons.account_circle,
+                                    color: Colors.black87),
+                                //same over here
+                                title: Text(
+                                  "${commonAttendeesInfo[index].name} ${commonAttendeesInfo[index].surname} ${(commonAttendeesInfo[index].position != null) ? commonAttendeesInfo[index].position : ""} ",
+                                  style: const TextStyle(
+                                      color: Colors.black87, fontSize: 20),
+                                ),
 
-                    //   trailing: IconButton(
-                    //     icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
-                    //     onPressed: () {
-                    //       Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //               builder: (context) => EventDetails(event: e)));
-                    //     },
-                    //   ),
-                    // ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.arrow_forward_ios,
+                                      color: Colors.black87),
+                                  onPressed: () {
+                                    /*
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ContactsDetailsPage(
+                              name: contactList[index].name)),
+                    );
+                    */
+                                  },
+                                ),
+                              ),
+                            ),
+                            // endActionPane: ActionPane(
+                            //   extentRatio: 0.2,
+                            //   motion: const ScrollMotion(),
+                            //   children: [
+                            //     SlidableAction(
+                            //       key: ValueKey(widget.event.attendees?[index]),
+                            //       autoClose: true,
+                            //       onPressed: (context) {
+                            //         removeContact(index);
+                            //       },
+                            //       backgroundColor: Colors.red,
+                            //       foregroundColor: Colors.white,
+                            //       icon: Icons.delete,
+                            //     ),
+                            //   ],
+                            // ),
+                          );
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),

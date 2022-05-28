@@ -103,7 +103,7 @@ class _EventCalendarState extends State<EventCalendar> {
             leading: const Icon(Icons.event, color: Colors.white),
             //same over here
             title: Text(
-              e.description,
+              e.name,
               style: const TextStyle(color: Colors.white, fontSize: 20),
             ),
 
