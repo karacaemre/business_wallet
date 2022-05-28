@@ -14,12 +14,17 @@ class Contacts extends StatefulWidget {
 
 class _ContactsPageState extends State<Contacts> {
   late List<int> contactList = [];
+
   User? user;
+  Remote remote = Remote();
 
   @override
   void initState() {
     super.initState();
     getContacts();
+    // getContactInfo(widget.id).then((value) => setState(() {
+    //       user = value.data;
+    //     }));
   }
 
   getContacts() {
@@ -62,14 +67,14 @@ class _ContactsPageState extends State<Contacts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         title: const Text(
           "Contacts",
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 20,
           ),
         ),
@@ -78,7 +83,7 @@ class _ContactsPageState extends State<Contacts> {
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
         padding: const EdgeInsets.all(20),
-        color: Colors.black,
+        color: Colors.white,
         child: ListView(
           scrollDirection: Axis.vertical,
           children: [
@@ -154,7 +159,7 @@ class _ContactsPageState extends State<Contacts> {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: ListTile(
-                tileColor: Colors.black87,
+                tileColor: Colors.black,
                 leading: const Icon(Icons.contacts, color: Colors.white),
                 //same over here
                 title: Text(
@@ -165,7 +170,6 @@ class _ContactsPageState extends State<Contacts> {
                 trailing: IconButton(
                   icon:
                       const Icon(Icons.arrow_forward_ios, color: Colors.white),
-                  //TODO: ContactDetails Sayfasıyla Bağla
                   onPressed: () {
                     Navigator.push(
                       context,

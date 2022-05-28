@@ -100,14 +100,8 @@ class _ContactDetailsState extends State<ContactDetails> {
                   color: Colors.grey.shade400,
                 ),
               ),
-              const SizedBox(
-                height: 3,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.12,
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               Divider(
                 thickness: 1.15,
@@ -311,7 +305,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.12,
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               Divider(
                 thickness: 1.15,
@@ -333,7 +327,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: 2, //events.length,
+                      itemCount: events?.length, //events.length,
                       itemBuilder: (context, index) {
                         return Slidable(
                           key: ValueKey(events?[index]),
