@@ -1,6 +1,7 @@
 import 'package:business_wallet/http/remote.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import '../controller/auth.dart';
@@ -8,6 +9,7 @@ import '../model/user.dart';
 import '../http/remote.dart';
 import '../model/event.dart';
 import 'contacts.dart';
+import 'event_details.dart';
 
 class ContactDetails extends StatefulWidget {
   int id;
@@ -20,26 +22,27 @@ class ContactDetails extends StatefulWidget {
 
 class _ContactDetailsState extends State<ContactDetails> {
   User? user;
-  Event? event;
+  List<Event>? events;
   Remote remote = Remote();
 
   @override
   void initState() {
     super.initState();
-    getContactInfo().then((value) => setState(() {
+
+    getContactInfo(widget.id).then((value) => setState(() {
           user = value.data;
         }));
-    getEventsTogether().then((value) => setState(() {
-          event = value.data;
+    getEventsTogether(widget.id).then((value) => setState(() {
+          events = value.data;
         }));
   }
 
-  getContactInfo() async {
-    return await remote.getContact(widget.id);
+  getContactInfo(int id) async {
+    return await remote.getContact(id);
   }
 
-  getEventsTogether() async {
-    return await remote.eventTogether(widget.id);
+  getEventsTogether(int id) async {
+    return await remote.eventTogether(id);
   }
 
   addContact(String name) {
@@ -80,7 +83,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                 height: MediaQuery.of(context).size.height * 0.12,
               ),
               Text(
-                "Emre Karaca",
+                user!.name + " " + user!.surname,
                 // user?.name ?? ""user?.surname ?? "",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
@@ -92,7 +95,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                 height: 5,
               ),
               Text(
-                'Job Title',
+                user?.position ?? "",
                 style: TextStyle(
                   color: Colors.grey.shade400,
                 ),
@@ -171,7 +174,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                                 height: 3,
                               ),
                               Text(
-                                Remote.user.phone,
+                                user!.phone,
                                 style: const TextStyle(
                                   color: Colors.grey,
                                   letterSpacing: 1.0,
@@ -233,7 +236,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                                     height: 3,
                                   ),
                                   Text(
-                                    Remote.user.email ?? "",
+                                    user?.email ?? "",
                                     style: const TextStyle(
                                       color: Colors.grey,
                                       letterSpacing: 1.0,
@@ -291,7 +294,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                                   height: 3,
                                 ),
                                 Text(
-                                  Remote.user.linkedin ?? "",
+                                  user?.linkedin ?? "",
                                   style: const TextStyle(
                                     color: Colors.grey,
                                     letterSpacing: 1.0,
@@ -324,19 +327,51 @@ class _ContactDetailsState extends State<ContactDetails> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                child: ListTile(
-                  tileColor: Colors.black87,
-                  leading: const Icon(Icons.event, color: Colors.white),
-                  //same over here
-                  title: Text(
-                    "${event?.name}",
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ),
+              Column(
+                children: [
+                  SizedBox(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: 2, //events.length,
+                      itemBuilder: (context, index) {
+                        return Slidable(
+                          key: ValueKey(events?[index]),
+                          closeOnScroll: true,
+                          child: Card(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: ListTile(
+                              tileColor: Colors.white,
+                              leading: const Icon(Icons.event,
+                                  color: Colors.black87),
+                              //same over here
+                              title: Text(
+                                "${events?[index].name}",
+                                style: const TextStyle(
+                                    color: Colors.black87, fontSize: 20),
+                              ),
+
+                              trailing: IconButton(
+                                icon: const Icon(Icons.arrow_forward_ios,
+                                    color: Colors.black87),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EventDetails(
+                                              event: events![index])));
+                                },
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
               ),
             ],
           ),

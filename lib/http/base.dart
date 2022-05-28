@@ -3,7 +3,7 @@ import '../util/pair.dart';
 import 'package:http/http.dart' as http;
 
 class BaseHttp {
-  String host = "http://localhost:4242";
+  String host = "http://192.168.1.104:4242";
   final tokenKey = "_token";
   static late String token = "";
 

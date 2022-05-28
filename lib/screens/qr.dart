@@ -97,7 +97,7 @@ class ScanQrPage extends StatefulWidget {
 
 class _ScanQrPageState extends State<ScanQrPage> {
   Barcode? result;
-  User? contactInfo;
+  late User contactInfo;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -114,6 +114,10 @@ class _ScanQrPageState extends State<ScanQrPage> {
     super.dispose();
   }
 
+  void initState() {
+    super.initState();
+  }
+
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   @override
@@ -127,11 +131,16 @@ class _ScanQrPageState extends State<ScanQrPage> {
   }
 
   void readQr() async {
-    String newPossibleContact = result!.code.toString();
     if (result != null) {
-      contactInfo = json.decode(newPossibleContact);
       controller!.pauseCamera();
+      String? newPossibleContact = result!.code;
+
+      setState(() {
+        contactInfo = User.fromJson(json.decode(newPossibleContact!));
+      });
       controller!.dispose();
+    } else {
+      contactInfo = User("", "", "");
     }
   }
 
@@ -163,7 +172,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
       child: Column(
         children: <Widget>[
           Text(
-            result != null ? 'Result: ${result!.code}' : "Scan a QR Code",
+            result != null ? 'Result: ${contactInfo.name}' : "Scan a QR Code",
             maxLines: 3,
           ),
           Row(
@@ -171,14 +180,10 @@ class _ScanQrPageState extends State<ScanQrPage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 20)),
-                onPressed: () {},
+                onPressed: (result != null)
+                    ? () => Remote.user.addContact(contactInfo.id)
+                    : null,
                 child: const Text('Add to Contacts'),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 20)),
-                onPressed: null,
-                child: const Text(''),
               ),
             ],
           ),

@@ -156,7 +156,7 @@ class _EventDetailsState extends State<EventDetails> {
                         manageAttendingStatus(isAttending, widget.event.id);
                       },
                       child: Text(
-                        isAttending == true ? 'Katılmaktan Vazgeç' : "Katıl",
+                        isAttending == true ? 'Cancel' : "Attend",
                         maxLines: 3,
                       ),
                     ),
@@ -167,7 +167,7 @@ class _EventDetailsState extends State<EventDetails> {
                 flex: 2,
                 child: Column(
                   children: [
-                    Text("Tanıdığın Katılımcılar",
+                    Text("Attendees That You Have Met",
                         style: TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
@@ -213,22 +213,6 @@ class _EventDetailsState extends State<EventDetails> {
                                 ),
                               ),
                             ),
-                            // endActionPane: ActionPane(
-                            //   extentRatio: 0.2,
-                            //   motion: const ScrollMotion(),
-                            //   children: [
-                            //     SlidableAction(
-                            //       key: ValueKey(widget.event.attendees?[index]),
-                            //       autoClose: true,
-                            //       onPressed: (context) {
-                            //         removeContact(index);
-                            //       },
-                            //       backgroundColor: Colors.red,
-                            //       foregroundColor: Colors.white,
-                            //       icon: Icons.delete,
-                            //     ),
-                            //   ],
-                            // ),
                           );
                         },
                       ),

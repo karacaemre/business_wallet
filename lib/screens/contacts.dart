@@ -28,7 +28,8 @@ class _ContactsPageState extends State<Contacts> {
     });
   }
 
-  addNewContact(String name) {
+  addNewContact(String id) {
+    Remote.user.addContact(int.parse(id));
     /*
     Contact c = Contact(name);
 
@@ -108,7 +109,7 @@ class _ContactsPageState extends State<Contacts> {
             onChanged: (value) {
               input = value;
             },
-            decoration: const InputDecoration(hintText: "Contact name"),
+            decoration: const InputDecoration(hintText: "Contact id"),
           ),
           actions: <Widget>[
             TextButton(
@@ -120,13 +121,10 @@ class _ContactsPageState extends State<Contacts> {
             ),
             TextButton(
               onPressed: () {
-                input == ""
-                    ? null
-                    : setState(() {
-                        addNewContact(input)
-                            ? Navigator.pop(context, 'Add')
-                            : null;
-                      });
+                setState(() {
+                  Remote.user.addContact(int.parse(input));
+                });
+                Navigator.pop(context, 'Add');
               },
               child: const Text(
                 'Add',
