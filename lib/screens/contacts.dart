@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../http/remote.dart';
+import 'contact_details.dart';
+import '../model/user.dart';
 
 class Contacts extends StatefulWidget {
   const Contacts({Key? key, User}) : super(key: key);
@@ -12,6 +14,7 @@ class Contacts extends StatefulWidget {
 
 class _ContactsPageState extends State<Contacts> {
   late List<int> contactList = [];
+  User? user;
 
   @override
   void initState() {
@@ -164,15 +167,15 @@ class _ContactsPageState extends State<Contacts> {
                 trailing: IconButton(
                   icon:
                       const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                  //TODO: ContactDetails Sayfasıyla Bağla
                   onPressed: () {
-                    /*
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ContactsDetailsPage(
-                              name: contactList[index].name)),
+                        builder: (context) =>
+                            ContactDetails(id: contactList[index]),
+                      ),
                     );
-                    */
                   },
                 ),
               ),
