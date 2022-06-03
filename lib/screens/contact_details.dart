@@ -152,6 +152,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                     Expanded(
                       flex: 5,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,6 +215,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                         Expanded(
                           flex: 5,
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,6 +274,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                       Expanded(
                         flex: 5,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +330,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                     child: ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: events?.length, //events.length,
+                      itemCount: 3, //events.length,
                       itemBuilder: (context, index) {
                         return Slidable(
                           key: ValueKey(events?[index]),

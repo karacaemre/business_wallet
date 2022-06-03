@@ -32,7 +32,7 @@ class QR extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  CreateQr(qrData: Remote.user.toJson().toString()),
+                  CreateQr(qrData: Remote.user.id.toString()),
                   const ScanQrPage(),
                 ],
               ),
@@ -97,9 +97,10 @@ class ScanQrPage extends StatefulWidget {
 
 class _ScanQrPageState extends State<ScanQrPage> {
   Barcode? result;
-  late User contactInfo;
+  // late User contactInfo;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  late int contactId;
 
   void _onQRViewCreated(QRViewController controller) {
     setState(() => this.controller = controller);
@@ -134,13 +135,21 @@ class _ScanQrPageState extends State<ScanQrPage> {
     if (result != null) {
       controller!.pauseCamera();
       String? newPossibleContact = result!.code;
-
+      // var regex = RegExp(r'^\{([A-Z]+): ([0-9]+)(.*)$');
       setState(() {
-        contactInfo = User.fromJson(json.decode(newPossibleContact!));
+        try {
+          // var match = regex.firstMatch(newPossibleContact!);
+          // var finalmatch = match!.group(2);
+          // contactId = int.parse(finalmatch!);
+          contactId = int.parse(newPossibleContact!);
+          print(contactId);
+        } catch (e) {
+          print(e);
+        }
       });
       controller!.dispose();
     } else {
-      contactInfo = User("", "", "");
+      contactId = 115;
     }
   }
 
@@ -172,8 +181,9 @@ class _ScanQrPageState extends State<ScanQrPage> {
       child: Column(
         children: <Widget>[
           Text(
-            result != null ? 'Result: ${contactInfo.name}' : "Scan a QR Code",
-            maxLines: 3,
+            "",
+            // result != null ? 'Result: ${contactInfo.name}' : "Scan a QR Code",
+            // maxLines: 3,
           ),
           Row(
             children: [
@@ -181,7 +191,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
                 style: ElevatedButton.styleFrom(
                     textStyle: const TextStyle(fontSize: 20)),
                 onPressed: (result != null)
-                    ? () => Remote.user.addContact(contactInfo.id)
+                    ? () => Remote.user.addContact(contactId)
                     : null,
                 child: const Text('Add to Contacts'),
               ),
